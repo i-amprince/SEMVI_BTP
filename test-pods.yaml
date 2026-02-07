@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p1}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p2}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p3}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p4}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p5}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p6}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p7}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]
+- apiVersion: v1
+  kind: Pod
+  metadata: {name: p8}
+  spec:
+    schedulerName: default-scheduler
+    containers: [{name: c, image: nginx, resources: {requests: {cpu: "1"}}}]

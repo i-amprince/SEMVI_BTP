@@ -1,0 +1,44 @@
+apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+profiles:
+  - schedulerName: default-scheduler
+    plugins:
+      filter:
+        enabled:
+          - name: "NodeResourcesFit"
+          - name: "NodeName"
+          - name: "NodeUnschedulable"
+          - name: "TaintToleration"
+      preScore:
+        enabled:
+          - name: "PowerAware"
+      score:
+        enabled:
+          - name: "PowerAware"
+            weight: 1
+        disabled:
+          - name: "*" # Disable default scoring (ImageLocality, etc) to strictly follow TOPSIS
+    pluginConfig:
+      - name: PowerAware
+        args:
+          kind: PowerAwareArgs
+          apiVersion: kubescheduler.config.k8s.io/v1
+          
+          # CHANGE 1: "Benefit" means "Prefer nodes that already have pods".
+          # This discourages picking empty nodes.
+          podLoadBalancingCriteria: { weight: 0.1, type: "Benefit" }
+          
+          # CHANGE 2: "Benefit" means "Prefer nodes that are highly utilized".
+          # We increase weights (0.35) to prioritize packing.
+          cpuCriteria:              { weight: 0.35, type: "Benefit" }
+          memCriteria:              { weight: 0.35, type: "Benefit" }
+          
+          # CHANGE 3: We still want to minimize power ("Cost"), but we lower the weight (0.2).
+          # If this weight is too high, the scheduler will pick empty nodes 
+          # because they consume the least power (Base K0), defeating the packing strategy.
+          powerCriteria:            { weight: 0.2, type: "Cost" }
+          
+          powerModel:
+            k0: 150.0
+            k1: 100.0
+            k2: 4.5
