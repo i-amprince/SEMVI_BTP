@@ -1,13 +1,12 @@
-
 # ⚡ PowerAware Kubernetes Scheduler (TOPSIS-Based)
 
 A custom Kubernetes Scheduler Plugin that integrates **power-awareness** into pod placement using **Multi-Criteria Decision Making (TOPSIS)**.
 
 This scheduler optimizes:
 
-- Load balancing  
-- Bin packing  
-- Power consumption  
+- Load balancing
+- Bin packing
+- Power consumption
 
 Based on:
 
@@ -17,7 +16,7 @@ Based on:
 
 ## 📌 Problem Statement
 
-The default Kubernetes scheduler primarily focuses on CPU and memory utilization.  
+The default Kubernetes scheduler primarily focuses on CPU and memory utilization.
 It does not explicitly optimize power consumption.
 
 This project introduces a custom scheduler plugin that integrates energy-awareness directly into Kubernetes scoring.
@@ -30,12 +29,12 @@ The scheduler uses the **TOPSIS algorithm** (Technique for Order of Preference b
 
 ### Criteria Used
 
-| Criteria | Type     | Purpose |
-|----------|----------|----------|
-| pods     | Benefit  | Encourage bin packing |
-| cpu      | Benefit  | Prefer higher utilization |
-| memory   | Benefit  | Prefer higher utilization |
-| power    | Cost     | Minimize power consumption |
+| Criteria | Type    | Purpose                    |
+| -------- | ------- | -------------------------- |
+| pods     | Benefit | Encourage bin packing      |
+| cpu      | Benefit | Prefer higher utilization  |
+| memory   | Benefit | Prefer higher utilization  |
+| power    | Cost    | Minimize power consumption |
 
 ---
 
@@ -49,10 +48,10 @@ P(u) = k0 + k1 * (1 - e^(-k2 * u))
 
 Where:
 
-- `u` = CPU utilization  
-- `k0` = baseline power  
-- `k1` = additional power scaling  
-- `k2` = exponential growth factor  
+- `u` = CPU utilization
+- `k0` = baseline power
+- `k1` = additional power scaling
+- `k2` = exponential growth factor
 
 ---
 
@@ -91,6 +90,33 @@ docker build -t simulator-frontend ./web
 
 ```bash
 docker compose -f compose.yml -f compose.local.yml up -d
+```
+
+### 5️⃣ Export Current Configuration & Scheduling Results
+
+After pods are scheduled:
+
+1. Open the Simulator UI in your browser.
+2. Click the **Export** button.
+3. Download the exported configuration file.
+
+This exported file contains:
+
+- Cluster node details
+- Pod specifications
+- Scheduling decisions
+- Final node assignments
+
+Save this file for evaluation and future comparison.
+
+---
+
+### 6️⃣ Run Evaluation Script
+
+Use the provided Python script to calculate metrics:
+
+```bash
+python check_main.py
 ```
 
 ---
@@ -168,6 +194,23 @@ users:
 kubectl --kubeconfig ./kubeconfig.yaml apply -f nodes.yaml
 ```
 
+### Scripted Test Data (nodes_creation.py, pods_creation.py)
+
+For quick end-to-end testing, you can use the helper scripts that generate
+and apply the YAML automatically:
+
+```bash
+python nodes_creation.py
+python pods_creation.py
+```
+
+Notes:
+
+- `nodes_creation.py` is expected to generate `nodes.yaml` and automatically apply it
+  with `kubectl --kubeconfig ./kubeconfig.yaml apply -f nodes.yaml`.
+- `pods_creation.py` generates `pods.yaml` and applies it. Tune `NUM_PODS`
+  and `SCHEDULER_NAME` in the script to control the workload.
+
 ### Apply Pods
 
 ```bash
@@ -211,10 +254,10 @@ Lower value indicates better resource utilization.
 ## 🧪 Experiments
 
 | Experiment | Nodes | Pods |
-|------------|--------|------|
-| Exp 1 | 10 | 100 |
-| Exp 2 | 30 | 100 |
-| Exp 3 | 30 | 500 |
+| ---------- | ----- | ---- |
+| Exp 1      | 10    | 100  |
+| Exp 2      | 30    | 100  |
+| Exp 3      | 30    | 500  |
 
 Results demonstrate significant power reduction (up to ~34%) while maintaining effective workload distribution.
 
@@ -222,17 +265,17 @@ Results demonstrate significant power reduction (up to ~34%) while maintaining e
 
 ## 🚀 Key Features
 
-- Multi-criteria TOPSIS ranking  
-- Power-aware scheduling  
-- Configurable weights  
-- Benefit / Cost criteria support  
-- Docker-based deployment  
-- Compatible with kube-scheduler-simulator  
+- Multi-criteria TOPSIS ranking
+- Power-aware scheduling
+- Configurable weights
+- Benefit / Cost criteria support
+- Docker-based deployment
+- Compatible with kube-scheduler-simulator
 
 ---
 
 ## 👨‍💻 Author
 
-Prince Goyal  
-B.Tech CSE  
+Prince Goyal
+B.Tech CSE
 IIIT Guwahati
