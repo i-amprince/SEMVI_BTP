@@ -5,7 +5,7 @@ import math
 import csv
 import os
 
-# --- POWER MODEL PARAMETERS (Paper Version) ---
+# --- POWER MODEL PARAMETERS ---
 K0 = 150.0
 K1 = 100.0
 K2 = 3.0
@@ -13,6 +13,9 @@ K2 = 3.0
 OUTPUT_DIR = "results"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+# -------------------------------
+# Parsing helpers
+# -------------------------------
 def parse_cpu(cpu_val):
     if not cpu_val:
         return 0.0
@@ -31,6 +34,9 @@ def parse_mem(mem_val):
         return float(mem_str[:-1]) / 1024.0
     return float(mem_str)
 
+# -------------------------------
+# Metric computation
+# -------------------------------
 def get_metrics(file_path):
     with open(file_path, 'r') as f:
         data = yaml.safe_load(f)
@@ -39,6 +45,7 @@ def get_metrics(file_path):
     pods = data.get('pods', [])
 
     node_stats = {}
+
     for n in nodes:
         name = n['metadata']['name']
         node_stats[name] = {
@@ -50,6 +57,7 @@ def get_metrics(file_path):
         }
 
     unscheduled_count = 0
+
     for p in pods:
         node_name = p.get('spec', {}).get('nodeName')
         if not node_name:
@@ -63,20 +71,31 @@ def get_metrics(file_path):
                 node_stats[node_name]['used_cpu'] += parse_cpu(req.get('cpu', 0))
                 node_stats[node_name]['used_mem'] += parse_mem(req.get('memory', 0))
 
-    cpu_usages = [ns['used_cpu'] for ns in node_stats.values()]
-    mem_usages = [ns['used_mem'] for ns in node_stats.values()]
+    # ---- UTILIZATION BASED LBF (important correction) ----
+    cpu_utils = [
+        ns['used_cpu'] / ns['cap_cpu'] if ns['cap_cpu'] > 0 else 0
+        for ns in node_stats.values()
+    ]
+
+    mem_utils = [
+        ns['used_mem'] / ns['cap_mem'] if ns['cap_mem'] > 0 else 0
+        for ns in node_stats.values()
+    ]
+
     pod_counts = [ns['pod_count'] for ns in node_stats.values()]
 
     def lbf(data_list):
         return np.std(data_list) / np.mean(data_list) if np.mean(data_list) > 0 else 0
 
-    lbf_cpu = lbf(cpu_usages)
-    lbf_mem = lbf(mem_usages)
+    lbf_cpu = lbf(cpu_utils)
+    lbf_mem = lbf(mem_utils)
     lbf_pod = lbf(pod_counts)
 
+    # ---- Power & RF ----
     total_power = 0
     active_nodes = 0
     rf_values = []
+
     unscheduled_ratio = unscheduled_count / len(pods) if pods else 0
 
     for ns in node_stats.values():
@@ -88,8 +107,10 @@ def get_metrics(file_path):
         power = K0 + K1 * math.exp(-K2 * util)
         total_power += power
 
-        u = np.array([ns['cap_cpu'] - ns['used_cpu'], ns['cap_mem'] - ns['used_mem']])
+        u = np.array([ns['cap_cpu'] - ns['used_cpu'],
+                      ns['cap_mem'] - ns['used_mem']])
         v = np.array([ns['cap_cpu'], ns['cap_mem']])
+
         rfi = (np.linalg.norm(u) / np.linalg.norm(v)) * unscheduled_ratio
         rf_values.append(rfi)
 
@@ -104,64 +125,68 @@ def get_metrics(file_path):
         "Avg RF": avg_rf
     }
 
-def save_csv(res_default, res_aware):
-    csv_path = os.path.join(OUTPUT_DIR, "comparison_results.csv")
-    with open(csv_path, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["Metric", "Default Scheduler", "Power-Aware (TOPSIS)", "Improvement (%)"])
+# -------------------------------
+# Input files
+# -------------------------------
+normal_small = "normal_small.yml"
+power_small  = "power_small.yml"
+normal_big   = "normaloutput.yml"
+power_big    = "poweroutput2.yml"
 
-        for metric in res_default.keys():
-            default_val = res_default[metric]
-            aware_val = res_aware[metric]
+# -------------------------------
+# Compute metrics
+# -------------------------------
+res_ns = get_metrics(normal_small)
+res_ps = get_metrics(power_small)
+res_nb = get_metrics(normal_big)
+res_pb = get_metrics(power_big)
 
-            if default_val != 0:
-                improvement = ((default_val - aware_val) / default_val) * 100
-            else:
-                improvement = 0
+# -------------------------------
+# Save CSV
+# -------------------------------
+csv_path = os.path.join(OUTPUT_DIR, "comparison_results.csv")
 
-            writer.writerow([metric, default_val, aware_val, improvement])
+with open(csv_path, mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(["Metric",
+                     "Normal Small", "Power Small",
+                     "Normal Big", "Power Big"])
 
-    print(f"\nCSV saved to {csv_path}")
+    for metric in res_ns.keys():
+        writer.writerow([
+            metric,
+            res_ns[metric],
+            res_ps[metric],
+            res_nb[metric],
+            res_pb[metric]
+        ])
 
-def plot_comparison(res_default, res_aware):
-    for metric in res_default.keys():
-        plt.figure(figsize=(6, 4))
-        values = [res_default[metric], res_aware[metric]]
-        labels = ['Default Scheduler', 'Power-Aware (TOPSIS)']
+print(f"\nCSV saved to {csv_path}")
 
-        bars = plt.bar(labels, values)
+# -------------------------------
+# Plot (Paper-style format)
+# -------------------------------
+for metric in res_ns.keys():
 
-        for bar in bars:
-            height = bar.get_height()
-            plt.text(
-                bar.get_x() + bar.get_width()/2,
-                height,
-                f'{height:.3f}',
-                ha='center',
-                va='bottom'
-            )
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+    fig.suptitle(metric)
 
-        plt.title(metric)
-        plt.ylabel("Value")
-        plt.tight_layout()
+    # --- Small cluster subplot ---
+    small_vals = [res_ns[metric], res_ps[metric]]
+    axes[0].bar(['Default', 'Power-Aware'], small_vals)
+    axes[0].set_title("Small Cluster")
+    axes[0].set_ylabel("Value")
 
-        file_name = metric.replace(" ", "_") + ".png"
-        save_path = os.path.join(OUTPUT_DIR, file_name)
-        plt.savefig(save_path)
-        print(f"Graph saved to {save_path}")
+    # --- Big cluster subplot ---
+    big_vals = [res_nb[metric], res_pb[metric]]
+    axes[1].bar(['Default', 'Power-Aware'], big_vals)
+    axes[1].set_title("Big Cluster")
 
-        plt.show()
+    plt.tight_layout()
 
-# --- EXECUTION ---
-file1 = 'normaloutput.yml'
-file2 = 'poweroutput2.yml'
+    save_path = os.path.join(OUTPUT_DIR,
+                             metric.replace(" ", "_") + ".png")
+    plt.savefig(save_path)
+    print(f"Graph saved to {save_path}")
 
-results_default = get_metrics(file1)
-results_aware = get_metrics(file2)
-
-print("\n--- RESULTS ---")
-for k in results_default.keys():
-    print(f"{k:<15} | Default: {results_default[k]:.4f} | Aware: {results_aware[k]:.4f}")
-
-save_csv(results_default, results_aware)
-plot_comparison(results_default, results_aware)
+    plt.show()
