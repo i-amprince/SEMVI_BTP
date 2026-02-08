@@ -2,7 +2,7 @@ import yaml
 import random
 import subprocess
 
-NUM_PODS = 200
+NUM_PODS = 100
 SCHEDULER_NAME = "default-scheduler"
 
 def create_pod(name):

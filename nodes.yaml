@@ -4,12 +4,12 @@ metadata:
   name: small-node-0
 status:
   allocatable:
-    cpu: '2'
-    memory: 11Gi
+    cpu: '4'
+    memory: 10Gi
     pods: '250'
   capacity:
-    cpu: '2'
-    memory: 11Gi
+    cpu: '4'
+    memory: 10Gi
     pods: '250'
 ---
 apiVersion: v1
@@ -32,110 +32,12 @@ metadata:
   name: small-node-2
 status:
   allocatable:
-    cpu: '2'
-    memory: 11Gi
-    pods: '250'
-  capacity:
-    cpu: '2'
-    memory: 11Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: small-node-3
-status:
-  allocatable:
-    cpu: '3'
-    memory: 13Gi
-    pods: '250'
-  capacity:
-    cpu: '3'
-    memory: 13Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: small-node-4
-status:
-  allocatable:
     cpu: '4'
-    memory: 13Gi
+    memory: 10Gi
     pods: '250'
   capacity:
     cpu: '4'
-    memory: 13Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: small-node-5
-status:
-  allocatable:
-    cpu: '4'
-    memory: 11Gi
-    pods: '250'
-  capacity:
-    cpu: '4'
-    memory: 11Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: small-node-6
-status:
-  allocatable:
-    cpu: '2'
-    memory: 14Gi
-    pods: '250'
-  capacity:
-    cpu: '2'
-    memory: 14Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: small-node-7
-status:
-  allocatable:
-    cpu: '3'
-    memory: 8Gi
-    pods: '250'
-  capacity:
-    cpu: '3'
-    memory: 8Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: small-node-8
-status:
-  allocatable:
-    cpu: '3'
-    memory: 16Gi
-    pods: '250'
-  capacity:
-    cpu: '3'
-    memory: 16Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: small-node-9
-status:
-  allocatable:
-    cpu: '4'
-    memory: 14Gi
-    pods: '250'
-  capacity:
-    cpu: '4'
-    memory: 14Gi
+    memory: 10Gi
     pods: '250'
 ---
 apiVersion: v1
@@ -144,12 +46,12 @@ metadata:
   name: medium-node-0
 status:
   allocatable:
-    cpu: '13'
-    memory: 38Gi
+    cpu: '10'
+    memory: 40Gi
     pods: '250'
   capacity:
-    cpu: '13'
-    memory: 38Gi
+    cpu: '10'
+    memory: 40Gi
     pods: '250'
 ---
 apiVersion: v1
@@ -158,12 +60,12 @@ metadata:
   name: medium-node-1
 status:
   allocatable:
-    cpu: '16'
-    memory: 53Gi
+    cpu: '11'
+    memory: 57Gi
     pods: '250'
   capacity:
-    cpu: '16'
-    memory: 53Gi
+    cpu: '11'
+    memory: 57Gi
     pods: '250'
 ---
 apiVersion: v1
@@ -172,110 +74,12 @@ metadata:
   name: medium-node-2
 status:
   allocatable:
-    cpu: '9'
-    memory: 40Gi
-    pods: '250'
-  capacity:
-    cpu: '9'
-    memory: 40Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: medium-node-3
-status:
-  allocatable:
-    cpu: '8'
-    memory: 36Gi
-    pods: '250'
-  capacity:
-    cpu: '8'
-    memory: 36Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: medium-node-4
-status:
-  allocatable:
-    cpu: '13'
-    memory: 40Gi
-    pods: '250'
-  capacity:
-    cpu: '13'
-    memory: 40Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: medium-node-5
-status:
-  allocatable:
-    cpu: '8'
-    memory: 42Gi
-    pods: '250'
-  capacity:
-    cpu: '8'
-    memory: 42Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: medium-node-6
-status:
-  allocatable:
-    cpu: '13'
-    memory: 48Gi
-    pods: '250'
-  capacity:
-    cpu: '13'
-    memory: 48Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: medium-node-7
-status:
-  allocatable:
-    cpu: '13'
-    memory: 36Gi
-    pods: '250'
-  capacity:
-    cpu: '13'
-    memory: 36Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: medium-node-8
-status:
-  allocatable:
-    cpu: '8'
-    memory: 58Gi
-    pods: '250'
-  capacity:
-    cpu: '8'
-    memory: 58Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: medium-node-9
-status:
-  allocatable:
     cpu: '14'
-    memory: 50Gi
+    memory: 38Gi
     pods: '250'
   capacity:
     cpu: '14'
-    memory: 50Gi
+    memory: 38Gi
     pods: '250'
 ---
 apiVersion: v1
@@ -284,12 +88,12 @@ metadata:
   name: large-node-0
 status:
   allocatable:
-    cpu: '39'
-    memory: 129Gi
+    cpu: '33'
+    memory: 186Gi
     pods: '250'
   capacity:
-    cpu: '39'
-    memory: 129Gi
+    cpu: '33'
+    memory: 186Gi
     pods: '250'
 ---
 apiVersion: v1
@@ -298,12 +102,12 @@ metadata:
   name: large-node-1
 status:
   allocatable:
-    cpu: '52'
-    memory: 159Gi
+    cpu: '54'
+    memory: 135Gi
     pods: '250'
   capacity:
-    cpu: '52'
-    memory: 159Gi
+    cpu: '54'
+    memory: 135Gi
     pods: '250'
 ---
 apiVersion: v1
@@ -312,108 +116,10 @@ metadata:
   name: large-node-2
 status:
   allocatable:
-    cpu: '44'
-    memory: 158Gi
+    cpu: '40'
+    memory: 255Gi
     pods: '250'
   capacity:
-    cpu: '44'
-    memory: 158Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: large-node-3
-status:
-  allocatable:
-    cpu: '32'
-    memory: 149Gi
-    pods: '250'
-  capacity:
-    cpu: '32'
-    memory: 149Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: large-node-4
-status:
-  allocatable:
-    cpu: '55'
-    memory: 143Gi
-    pods: '250'
-  capacity:
-    cpu: '55'
-    memory: 143Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: large-node-5
-status:
-  allocatable:
-    cpu: '53'
-    memory: 225Gi
-    pods: '250'
-  capacity:
-    cpu: '53'
-    memory: 225Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: large-node-6
-status:
-  allocatable:
-    cpu: '51'
-    memory: 150Gi
-    pods: '250'
-  capacity:
-    cpu: '51'
-    memory: 150Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: large-node-7
-status:
-  allocatable:
-    cpu: '42'
-    memory: 219Gi
-    pods: '250'
-  capacity:
-    cpu: '42'
-    memory: 219Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: large-node-8
-status:
-  allocatable:
-    cpu: '61'
-    memory: 179Gi
-    pods: '250'
-  capacity:
-    cpu: '61'
-    memory: 179Gi
-    pods: '250'
----
-apiVersion: v1
-kind: Node
-metadata:
-  name: large-node-9
-status:
-  allocatable:
-    cpu: '48'
-    memory: 172Gi
-    pods: '250'
-  capacity:
-    cpu: '48'
-    memory: 172Gi
+    cpu: '40'
+    memory: 255Gi
     pods: '250'

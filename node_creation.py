@@ -2,9 +2,9 @@ import yaml
 import random
 import subprocess
 
-NUM_SMALL = 10
-NUM_MEDIUM = 10
-NUM_LARGE = 10
+NUM_SMALL = 3
+NUM_MEDIUM = 3
+NUM_LARGE = 3
 
 NODE_TYPES = {
     "small": (2, 4),
