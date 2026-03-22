@@ -1,192 +1,223 @@
-import yaml
-import numpy as np
-import matplotlib.pyplot as plt
-import math
+import argparse
 import csv
+import math
 import os
+import sys
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import yaml
 
-# --- POWER MODEL PARAMETERS ---
-K0 = 150.0
-K1 = 100.0
-K2 = 3.0
-
+# Defaults now represent Watts per Core
+DEFAULT_K0 = 10.0
+DEFAULT_K1 = 5.0
+DEFAULT_K2 = 4.0
 OUTPUT_DIR = "results"
+
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# -------------------------------
-# Parsing helpers
-# -------------------------------
-def parse_cpu(cpu_val):
-    if not cpu_val:
+def parse_cpu(val) -> float:
+    if not val:
         return 0.0
-    cpu_str = str(cpu_val)
-    if cpu_str.endswith('m'):
-        return float(cpu_str[:-1]) / 1000.0
-    return float(cpu_str)
+    s = str(val).strip()
+    if s.endswith('m'):
+        return float(s[:-1]) / 1000.0
+    return float(s)
 
-def parse_mem(mem_val):
-    if not mem_val:
+def parse_mem(val) -> float:
+    if not val:
         return 0.0
-    mem_str = str(mem_val).replace('i', '')
-    if mem_str.endswith('G'):
-        return float(mem_str[:-1])
-    if mem_str.endswith('M'):
-        return float(mem_str[:-1]) / 1024.0
-    return float(mem_str)
+    s = str(val).strip().replace('i', '')
+    if s.endswith('G'): return float(s[:-1])
+    if s.endswith('M'): return float(s[:-1]) / 1024.0
+    if s.endswith('K'): return float(s[:-1]) / (1024.0 ** 2)
+    return float(s) / (1024.0 ** 3)
 
-# -------------------------------
-# Metric computation
-# -------------------------------
-def get_metrics(file_path):
+def coeff_of_variation(values: list) -> float:
+    arr = np.array(values, dtype=float)
+    mu = arr.mean()
+    return float(arr.std() / mu) if mu > 1e-9 else 0.0
+
+def get_metrics(file_path: str, k0: float, k1: float, k2: float) -> dict:
+    if not os.path.exists(file_path):
+        sys.exit(f"ERROR: File not found: {file_path}")
+        
     with open(file_path, 'r') as f:
         data = yaml.safe_load(f)
 
-    nodes = data.get('nodes', [])
-    pods = data.get('pods', [])
+    raw_nodes = data.get('nodes', [])
+    raw_pods  = data.get('pods',  [])
 
     node_stats = {}
+    for n in raw_nodes:
+        name   = n['metadata']['name']
+        status = n.get('status', {})
+        alloc = status.get('allocatable', status.get('capacity', {}))
 
-    for n in nodes:
-        name = n['metadata']['name']
         node_stats[name] = {
-            'cap_cpu': parse_cpu(n['status']['capacity']['cpu']),
-            'cap_mem': parse_mem(n['status']['capacity']['memory']),
+            'cap_cpu': parse_cpu(alloc.get('cpu', '1')),
+            'cap_mem': parse_mem(alloc.get('memory', '1G')),
             'used_cpu': 0.0,
             'used_mem': 0.0,
-            'pod_count': 0
+            'pod_count': 0,
         }
 
+    total_pods = len(raw_pods)
     unscheduled_count = 0
 
-    for p in pods:
-        node_name = p.get('spec', {}).get('nodeName')
-        if not node_name:
+    for p in raw_pods:
+        spec      = p.get('spec', {})
+        node_name = spec.get('nodeName')
+
+        if not node_name or node_name not in node_stats:
             unscheduled_count += 1
             continue
 
-        if node_name in node_stats:
-            node_stats[node_name]['pod_count'] += 1
-            for container in p['spec']['containers']:
-                req = container.get('resources', {}).get('requests', {})
-                node_stats[node_name]['used_cpu'] += parse_cpu(req.get('cpu', 0))
-                node_stats[node_name]['used_mem'] += parse_mem(req.get('memory', 0))
+        node_stats[node_name]['pod_count'] += 1
 
-    # ---- UTILIZATION BASED LBF (important correction) ----
-    cpu_utils = [
-        ns['used_cpu'] / ns['cap_cpu'] if ns['cap_cpu'] > 0 else 0
-        for ns in node_stats.values()
-    ]
+        for container in spec.get('containers', []):
+            req = container.get('resources', {}).get('requests', {})
+            node_stats[node_name]['used_cpu'] += parse_cpu(req.get('cpu', 0))
+            node_stats[node_name]['used_mem'] += parse_mem(req.get('memory', 0))
 
-    mem_utils = [
-        ns['used_mem'] / ns['cap_mem'] if ns['cap_mem'] > 0 else 0
-        for ns in node_stats.values()
-    ]
-
-    pod_counts = [ns['pod_count'] for ns in node_stats.values()]
-
-    def lbf(data_list):
-        return np.std(data_list) / np.mean(data_list) if np.mean(data_list) > 0 else 0
-
-    lbf_cpu = lbf(cpu_utils)
-    lbf_mem = lbf(mem_utils)
-    lbf_pod = lbf(pod_counts)
-
-    # ---- Power & RF ----
-    total_power = 0
-    active_nodes = 0
+    cpu_utils  = []
+    mem_utils  = []
+    pod_counts = []
+    total_power = 0.0
     rf_values = []
 
-    unscheduled_ratio = unscheduled_count / len(pods) if pods else 0
+    unscheduled_ratio = unscheduled_count / total_pods if total_pods > 0 else 0.0
 
     for ns in node_stats.values():
+        cpu_u = (ns['used_cpu'] / ns['cap_cpu']) if ns['cap_cpu'] > 0 else 0.0
+        mem_u = (ns['used_mem'] / ns['cap_mem']) if ns['cap_mem'] > 0 else 0.0
+        
+        util = min(cpu_u, 1.0)
+        cpu_utils.append(util)
+        mem_utils.append(min(mem_u, 1.0))
+        pod_counts.append(ns['pod_count'])
 
+        # Heterogeneous Power Calculation
         if ns['pod_count'] > 0:
-            active_nodes += 1
+            cores = ns['cap_cpu'] if ns['cap_cpu'] > 0 else 1.0
+            node_k0 = k0 * cores
+            node_k1 = k1 * cores
+            power = node_k0 + node_k1 * (1.0 - math.exp(-k2 * util))
+            total_power += power
 
-        util = min(1.0, ns['used_cpu'] / ns['cap_cpu']) if ns['cap_cpu'] > 0 else 0
-        power = K0 + K1 * math.exp(-K2 * util)
-        total_power += power
-
-        u = np.array([ns['cap_cpu'] - ns['used_cpu'],
-                      ns['cap_mem'] - ns['used_mem']])
+        u = np.array([
+            max(ns['cap_cpu'] - ns['used_cpu'], 0.0),
+            max(ns['cap_mem'] - ns['used_mem'], 0.0),
+        ])
         v = np.array([ns['cap_cpu'], ns['cap_mem']])
 
-        rfi = (np.linalg.norm(u) / np.linalg.norm(v)) * unscheduled_ratio
+        norm_v = np.linalg.norm(v)
+        rfi = (np.linalg.norm(u) / norm_v) * unscheduled_ratio if norm_v > 1e-9 else 0.0
         rf_values.append(rfi)
 
-    avg_rf = np.mean(rf_values)
+    avg_rf = float(np.mean(rf_values)) if rf_values else 0.0
 
     return {
-        "LBF CPU": lbf_cpu,
-        "LBF Mem": lbf_mem,
-        "LBF Pod": lbf_pod,
-        "Active Nodes": active_nodes,
-        "Total Power": total_power,
-        "Avg RF": avg_rf
+        "LBF (CPU)":                      coeff_of_variation(cpu_utils),
+        "LBF (Memory)":                   coeff_of_variation(mem_utils),
+        "LBF (Pod)":                      coeff_of_variation(pod_counts),
+        "Average Power Consumption (W)":  total_power, 
+        "Average Resource Fragmentation": avg_rf,
+        "Unscheduled Pods Ratio":         unscheduled_ratio,
     }
 
-# -------------------------------
-# Input files
-# -------------------------------
-normal_small = "normal_small.yml"
-power_small  = "power_small.yml"
-normal_big   = "normaloutput.yml"
-power_big    = "poweroutput2.yml"
+def parse_args():
+    p = argparse.ArgumentParser()
+    p.add_argument("--k0", type=float, default=DEFAULT_K0)
+    p.add_argument("--k1", type=float, default=DEFAULT_K1)
+    p.add_argument("--k2", type=float, default=DEFAULT_K2)
+    p.add_argument("--exp1-power",   default=None)
+    p.add_argument("--exp1-default", default=None)
+    p.add_argument("--exp2-power",   default=None)
+    p.add_argument("--exp2-default", default=None)
+    p.add_argument("--exp3-power",   default=None)
+    p.add_argument("--exp3-default", default=None)
+    return p.parse_args()
 
-# -------------------------------
-# Compute metrics
-# -------------------------------
-res_ns = get_metrics(normal_small)
-res_ps = get_metrics(power_small)
-res_nb = get_metrics(normal_big)
-res_pb = get_metrics(power_big)
+def main():
+    args = parse_args()
+    k0, k1, k2 = args.k0, args.k1, args.k2
 
-# -------------------------------
-# Save CSV
-# -------------------------------
-csv_path = os.path.join(OUTPUT_DIR, "comparison_results.csv")
+    experiments = []
+    for i in (1, 2, 3):
+        pf = getattr(args, f"exp{i}_power")
+        df = getattr(args, f"exp{i}_default")
+        if pf and df:
+            experiments.append((f"Experiment {i}", df, pf))
 
-with open(csv_path, mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(["Metric",
-                     "Normal Small", "Power Small",
-                     "Normal Big", "Power Big"])
+    if not experiments:
+        sys.exit("No experiment files supplied.")
 
-    for metric in res_ns.keys():
-        writer.writerow([
-            metric,
-            res_ns[metric],
-            res_ps[metric],
-            res_nb[metric],
-            res_pb[metric]
-        ])
+    results = {}
 
-print(f"\nCSV saved to {csv_path}")
+    for label, df, pf in experiments:
+        r_default = get_metrics(df, k0, k1, k2)
+        r_power   = get_metrics(pf, k0, k1, k2)
+        results[label] = {"default": r_default, "power": r_power}
 
-# -------------------------------
-# Plot (Paper-style format)
-# -------------------------------
-for metric in res_ns.keys():
+    csv_path = os.path.join(OUTPUT_DIR, "comparison_results.csv")
+    metric_names = list(next(iter(results.values()))["default"].keys())
 
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-    fig.suptitle(metric)
+    with open(csv_path, 'w', newline='') as f:
+        w = csv.writer(f)
+        header = ["Metric"]
+        for label in results:
+            header += [f"{label} - Default", f"{label} - Power-Aware"]
+        w.writerow(header)
+        
+        for metric in metric_names:
+            row = [metric]
+            for label in results:
+                row.append(results[label]["default"][metric])
+                row.append(results[label]["power"][metric])
+            w.writerow(row)
 
-    # --- Small cluster subplot ---
-    small_vals = [res_ns[metric], res_ps[metric]]
-    axes[0].bar(['Default', 'Power-Aware'], small_vals)
-    axes[0].set_title("Small Cluster")
-    axes[0].set_ylabel("Value")
+    exp_labels  = list(results.keys())
+    n_exp       = len(exp_labels)
+    n_metrics   = len(metric_names)
 
-    # --- Big cluster subplot ---
-    big_vals = [res_nb[metric], res_pb[metric]]
-    axes[1].bar(['Default', 'Power-Aware'], big_vals)
-    axes[1].set_title("Big Cluster")
+    cols = 3
+    rows = math.ceil(n_metrics / cols)
 
-    plt.tight_layout()
+    fig, axes = plt.subplots(rows, cols, figsize=(15, 8))
+    fig.suptitle('Power-aware scheduler vs Default Kubernetes scheduler', fontsize=14, fontweight='bold')
+    
+    if n_metrics == 1:
+        axes = [axes]
+    else:
+        axes = axes.flatten()
 
-    save_path = os.path.join(OUTPUT_DIR,
-                             metric.replace(" ", "_") + ".png")
-    plt.savefig(save_path)
-    print(f"Graph saved to {save_path}")
+    x     = np.arange(n_exp)
+    width = 0.35
+    
+    for idx, metric in enumerate(metric_names):
+        ax = axes[idx]
 
-    plt.show()
+        default_vals = [results[lbl]["default"][metric] for lbl in exp_labels]
+        power_vals   = [results[lbl]["power"][metric]   for lbl in exp_labels]
+
+        ax.bar(x - width / 2, power_vals,   width, label="Power-aware scheduler", color="#539caf")
+        ax.bar(x + width / 2, default_vals, width, label="Default scheduler", color="#c9142b")
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(exp_labels, fontsize=10)
+        ax.set_title(metric, fontsize=11, fontweight='bold')
+
+    for j in range(idx + 1, len(axes)):
+        fig.delaxes(axes[j])
+
+    handles, labels_legend = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels_legend, loc="lower center", ncol=2, fontsize=12, frameon=False, bbox_to_anchor=(0.5, -0.05))
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+    plot_path = os.path.join(OUTPUT_DIR, "Fig2_Reproduction.png")
+    plt.savefig(plot_path, dpi=200, bbox_inches='tight')
+
+if __name__ == "__main__":
+    main()

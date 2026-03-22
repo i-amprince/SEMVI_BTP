@@ -4,7 +4,7 @@ import subprocess
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CHANGE THESE TO MATCH YOUR TEST RUN
-EXPERIMENT     = 3                   # 1, 2, or 3
+EXPERIMENT     = 1                   # 1, 2, or 3
 SCHEDULER_NAME = "power-aware-scheduler" # "power-aware-scheduler" OR "default-scheduler"
 # ─────────────────────────────────────────────────────────────────────────────
 
