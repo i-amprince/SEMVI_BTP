@@ -6,18 +6,48 @@ import (
 	"strings"
 
 	v1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
+
+func (pl *PowerAware) ScoreExtensions() framework.ScoreExtensions {
+	return nil
+}
 
 const (
 	Name             = "PowerAware"
 	preScoreStateKey = "PreScore" + Name
 )
 
+type PowerModelArgs struct {
+	K0 float64 `json:"k0"`
+	K1 float64 `json:"k1"`
+	K2 float64 `json:"k2"`
+}
+
+// Estimate now scales the baseline power by the number of CPU cores
+func (p PowerModelArgs) Estimate(x float64, cores float64) float64 {
+	nodeK0 := p.K0 * cores
+	nodeK1 := p.K1 * cores
+	return nodeK0 + nodeK1*(1.0-math.Exp(-p.K2*x))
+}
+
+type CriteriaConfig struct {
+	Weight float64 `json:"weight"`
+	Type   string  `json:"type"`
+}
+
+type PowerAwareArgs struct {
+	PodLoadBalancingCriteria CriteriaConfig `json:"podLoadBalancingCriteria"`
+	CpuCriteria              CriteriaConfig `json:"cpuCriteria"`
+	MemCriteria              CriteriaConfig `json:"memCriteria"`
+	PowerCriteria            CriteriaConfig `json:"powerCriteria"`
+	PowerModel               PowerModelArgs `json:"powerModel"`
+}
+
 type PowerAware struct {
+	handle       framework.Handle
 	weights      map[string]float64
 	costCriteria map[string]bool
 	powerModel   PowerModelArgs
@@ -37,47 +67,36 @@ type preScoreState struct {
 }
 
 func (s *preScoreState) Clone() framework.StateData { return s }
-func (pl *PowerAware) Name() string                 { return Name }
+func (pl *PowerAware) Name() string { return Name }
 
-func (pl *PowerAware) PreScore(
-	ctx context.Context,
-	state *framework.CycleState,
-	pod *v1.Pod,
-	nodes []*framework.NodeInfo,
-) *framework.Status {
-
+func (pl *PowerAware) PreScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodes []*framework.NodeInfo) *framework.Status {
 	if len(nodes) == 0 {
 		return nil
 	}
 
-	rawValues := make(map[string]nodeVector)
+	rawValues := make(map[string]nodeVector, len(nodes))
 	var sumP, sumC, sumM, sumPow float64
 
 	for _, n := range nodes {
+		nodeName := n.Node().Name
 
-		// EXACT paper logic: use CURRENT state only
-		p := float64(len(n.Pods))
+		p := float64(len(n.Pods)+1) / 110.0
 
-		c := 0.0
-		if n.Allocatable.MilliCPU > 0 {
-			c = float64(n.Requested.MilliCPU) / float64(n.Allocatable.MilliCPU)
+		utilCPU := float64(n.Requested.MilliCPU) / float64(n.Allocatable.MilliCPU)
+		utilMem := float64(n.Requested.Memory) / float64(n.Allocatable.Memory)
+
+		c := 1.0 - utilCPU
+		m := 1.0 - utilMem
+
+		// Extract total cores for heterogeneous power scaling
+		totalCores := float64(n.Allocatable.MilliCPU) / 1000.0
+		if totalCores <= 0 {
+			totalCores = 1.0
 		}
 
-		m := 0.0
-		if n.Allocatable.Memory > 0 {
-			m = float64(n.Requested.Memory) / float64(n.Allocatable.Memory)
-		}
+		pow := pl.powerModel.Estimate(math.Min(utilCPU, 1.0), totalCores)
 
-		// EXACT paper power formula
-		pow := pl.powerModel.Estimate(c)
-
-		rawValues[n.Node().Name] = nodeVector{
-			pods:  p,
-			cpu:   c,
-			mem:   m,
-			power: pow,
-		}
-
+		rawValues[nodeName] = nodeVector{pods: p, cpu: c, mem: m, power: pow}
 		sumP += p * p
 		sumC += c * c
 		sumM += m * m
@@ -85,121 +104,86 @@ func (pl *PowerAware) PreScore(
 	}
 
 	denoms := nodeVector{
-		math.Sqrt(sumP),
-		math.Sqrt(sumC),
-		math.Sqrt(sumM),
-		math.Sqrt(sumPow),
+		pods:  math.Sqrt(sumP) + 1e-9,
+		cpu:   math.Sqrt(sumC) + 1e-9,
+		mem:   math.Sqrt(sumM) + 1e-9,
+		power: math.Sqrt(sumPow) + 1e-9,
 	}
 
-	weightedMatrix := make(map[string]nodeVector)
-	ideal := nodeVector{}
-	negative := nodeVector{}
+	weightedMatrix := make(map[string]nodeVector, len(nodes))
+	var ideal, negative nodeVector
 	first := true
 
 	for name, v := range rawValues {
-
 		weighted := nodeVector{
-			pods:  safeDiv(v.pods, denoms.pods) * pl.weights["pods"],
-			cpu:   safeDiv(v.cpu, denoms.cpu) * pl.weights["cpu"],
-			mem:   safeDiv(v.mem, denoms.mem) * pl.weights["memory"],
-			power: safeDiv(v.power, denoms.power) * pl.weights["power"],
+			pods:  (v.pods / denoms.pods) * pl.weights["pods"],
+			cpu:   (v.cpu / denoms.cpu) * pl.weights["cpu"],
+			mem:   (v.mem / denoms.mem) * pl.weights["memory"],
+			power: (v.power / denoms.power) * pl.weights["power"],
 		}
-
 		weightedMatrix[name] = weighted
 
 		if first {
-			ideal, negative = weighted, weighted
-			first = false
+			ideal, negative, first = weighted, weighted, false
 		} else {
 			ideal = pl.getExtreme(ideal, weighted, true)
 			negative = pl.getExtreme(negative, weighted, false)
 		}
 	}
 
-	scores := make(map[string]int64)
-
+	scores := make(map[string]int64, len(nodes))
 	for name, v := range weightedMatrix {
+		dPlus := math.Sqrt(math.Pow(v.pods-ideal.pods, 2) + math.Pow(v.cpu-ideal.cpu, 2) + math.Pow(v.mem-ideal.mem, 2) + math.Pow(v.power-ideal.power, 2))
+		dMinus := math.Sqrt(math.Pow(v.pods-negative.pods, 2) + math.Pow(v.cpu-negative.cpu, 2) + math.Pow(v.mem-negative.mem, 2) + math.Pow(v.power-negative.power, 2))
 
-		dPlus := euclideanDist(v, ideal)
-		dMinus := euclideanDist(v, negative)
-
-		closeness := 0.5
+		closeness := 0.0
 		if (dPlus + dMinus) > 1e-9 {
 			closeness = dMinus / (dPlus + dMinus)
 		}
-
-		scores[name] = int64(math.Round(closeness * float64(framework.MaxNodeScore)))
+		
+		score := int64(math.Round(closeness * float64(framework.MaxNodeScore)))
+		if score > framework.MaxNodeScore {
+			score = framework.MaxNodeScore
+		}
+		if score < framework.MinNodeScore {
+			score = framework.MinNodeScore
+		}
+		scores[name] = score
 	}
 
 	state.Write(preScoreStateKey, &preScoreState{scores: scores})
 	return nil
 }
 
-func (pl *PowerAware) Score(
-	ctx context.Context,
-	state *framework.CycleState,
-	pod *v1.Pod,
-	nodeName string,
-) (int64, *framework.Status) {
-
+func (pl *PowerAware) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
 	data, err := state.Read(preScoreStateKey)
 	if err != nil {
 		return 0, nil
 	}
-
 	s := data.(*preScoreState)
 	return s.scores[nodeName], nil
 }
 
-func (pl *PowerAware) ScoreExtensions() framework.ScoreExtensions {
-	return nil
-}
-
 func (pl *PowerAware) getExtreme(curr, next nodeVector, isIdeal bool) nodeVector {
-
 	res := curr
 	keys := []string{"pods", "cpu", "memory", "power"}
 
 	for _, k := range keys {
-
-		v := pl.getVal(next, k)
-		c := pl.getVal(curr, k)
+		v, c := pl.getVal(next, k), pl.getVal(curr, k)
 		isCost := pl.costCriteria[k]
 
-		update := false
-
+		var shouldUpdate bool
 		if isIdeal {
-			if (isCost && v < c) || (!isCost && v > c) {
-				update = true
-			}
+			shouldUpdate = (isCost && v < c) || (!isCost && v > c)
 		} else {
-			if (isCost && v > c) || (!isCost && v < c) {
-				update = true
-			}
+			shouldUpdate = (isCost && v > c) || (!isCost && v < c)
 		}
 
-		if update {
+		if shouldUpdate {
 			pl.setVal(&res, k, v)
 		}
 	}
-
 	return res
-}
-
-func safeDiv(n, d float64) float64 {
-	if d < 1e-9 {
-		return 0
-	}
-	return n / d
-}
-
-func euclideanDist(a, b nodeVector) float64 {
-	return math.Sqrt(
-		math.Pow(a.pods-b.pods, 2) +
-			math.Pow(a.cpu-b.cpu, 2) +
-			math.Pow(a.mem-b.mem, 2) +
-			math.Pow(a.power-b.power, 2),
-	)
 }
 
 func (pl *PowerAware) getVal(v nodeVector, k string) float64 {
@@ -229,61 +213,29 @@ func (pl *PowerAware) setVal(v *nodeVector, k string, val float64) {
 	}
 }
 
-type PowerModelArgs struct {
-	K0 float64 `json:"k0"`
-	K1 float64 `json:"k1"`
-	K2 float64 `json:"k2"`
-}
-
-// EXACT paper formula: P(x) = k0 + k1 * exp(-k2 * x)
-func (p PowerModelArgs) Estimate(x float64) float64 {
-	return p.K0 + p.K1*math.Exp(-p.K2*x)
-}
-
-type CriteriaConfig struct {
-	Weight float64 `json:"weight"`
-	Type   string  `json:"type"`
-}
-
-type PowerAwareArgs struct {
-	metav1.TypeMeta          `json:",inline"`
-	PodLoadBalancingCriteria CriteriaConfig `json:"podLoadBalancingCriteria"`
-	CpuCriteria              CriteriaConfig `json:"cpuCriteria"`
-	MemCriteria              CriteriaConfig `json:"memCriteria"`
-	PowerCriteria            CriteriaConfig `json:"powerCriteria"`
-	PowerModel               PowerModelArgs `json:"powerModel"`
-}
-
 func New(ctx context.Context, arg runtime.Object, h framework.Handle) (framework.Plugin, error) {
-
-	typedArg := PowerAwareArgs{
-		PodLoadBalancingCriteria: CriteriaConfig{Weight: 0.2, Type: "Cost"},
-		CpuCriteria:              CriteriaConfig{Weight: 0.2, Type: "Cost"},
-		MemCriteria:              CriteriaConfig{Weight: 0.2, Type: "Cost"},
-		PowerCriteria:            CriteriaConfig{Weight: 0.4, Type: "Cost"},
-		PowerModel:               PowerModelArgs{K0: 150, K1: 100, K2: 3},
+	args := PowerAwareArgs{}
+	if err := frameworkruntime.DecodeInto(arg, &args); err != nil {
+		return nil, err
 	}
 
-	if arg != nil {
-		_ = frameworkruntime.DecodeInto(arg, &typedArg)
+	costMap := map[string]bool{
+		"pods":   strings.EqualFold(args.PodLoadBalancingCriteria.Type, "Cost"),
+		"cpu":    strings.EqualFold(args.CpuCriteria.Type, "Cost"),
+		"memory": strings.EqualFold(args.MemCriteria.Type, "Cost"),
+		"power":  strings.EqualFold(args.PowerCriteria.Type, "Cost"),
 	}
-
-	costMap := make(map[string]bool)
-	weights := make(map[string]float64)
-
-	assign := func(k string, c CriteriaConfig) {
-		weights[k] = c.Weight
-		costMap[k] = strings.EqualFold(c.Type, "Cost")
+	weights := map[string]float64{
+		"pods":   args.PodLoadBalancingCriteria.Weight,
+		"cpu":    args.CpuCriteria.Weight,
+		"memory": args.MemCriteria.Weight,
+		"power":  args.PowerCriteria.Weight,
 	}
-
-	assign("pods", typedArg.PodLoadBalancingCriteria)
-	assign("cpu", typedArg.CpuCriteria)
-	assign("memory", typedArg.MemCriteria)
-	assign("power", typedArg.PowerCriteria)
 
 	return &PowerAware{
+		handle:       h,
 		weights:      weights,
 		costCriteria: costMap,
-		powerModel:   typedArg.PowerModel,
+		powerModel:   args.PowerModel,
 	}, nil
 }

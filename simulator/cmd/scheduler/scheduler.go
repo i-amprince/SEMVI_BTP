@@ -14,11 +14,9 @@ import (
 )
 
 func main() {
-	// Register the custom PowerAware TOPSIS plugin
 	command, cancelFn, err := debuggablescheduler.NewSchedulerCommand(
 		debuggablescheduler.WithPlugin(powertopsis.Name, powertopsis.New),
 	)
-
 	if err != nil {
 		klog.ErrorS(err, "failed to build the debuggablescheduler command")
 		os.Exit(1)

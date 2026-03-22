@@ -1,9 +1,9 @@
 apiVersion: kubescheduler.config.k8s.io/v1
 kind: KubeSchedulerConfiguration
-
+leaderElection:
+  leaderElect: false
 profiles:
-  - schedulerName: default-scheduler
-
+  - schedulerName: power-aware-scheduler
     plugins:
       filter:
         enabled:
@@ -11,42 +11,46 @@ profiles:
           - name: "NodeName"
           - name: "NodeUnschedulable"
           - name: "TaintToleration"
-
       preScore:
         enabled:
           - name: "PowerAware"
-
       score:
+        disabled:
+          - name: "*" 
         enabled:
           - name: "PowerAware"
             weight: 1
-        disabled:
-          - name: "*"   # Disable default scoring to follow pure TOPSIS
-
     pluginConfig:
       - name: PowerAware
         args:
-          kind: PowerAwareArgs
-          apiVersion: kubescheduler.config.k8s.io/v1
-
-          # EXACT paper configuration
           podLoadBalancingCriteria:
             weight: 0.2
             type: "Cost"
-
           cpuCriteria:
             weight: 0.2
             type: "Cost"
-
           memCriteria:
             weight: 0.2
             type: "Cost"
-
           powerCriteria:
             weight: 0.4
-            type: "Cost"
-
+            type: "Cost"     # Reverted to Cost to avoid Large nodes
           powerModel:
-            k0: 150.0
-            k1: 100.0
-            k2: 3.0
+            k0: 5.0          # 5W idle per CPU core
+            k1: 10.0         # 10W max dynamic load per CPU core
+            k2: 4.0
+
+  - schedulerName: default-scheduler
+    plugins:
+      filter:
+        enabled:
+          - name: "NodeResourcesFit"
+          - name: "NodeName"
+          - name: "NodeUnschedulable"
+          - name: "TaintToleration"
+      score:
+        enabled:
+          - name: "NodeResourcesFit"
+          - name: "NodeResourcesBalancedAllocation"
+          - name: "ImageLocality"
+          - name: "TaintToleration"
