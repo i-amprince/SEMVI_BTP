@@ -31,12 +31,132 @@ status:
 apiVersion: v1
 kind: Node
 metadata:
+  name: small-node-2
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '2'
+    memory: 11Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: small-node-3
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '2'
+    memory: 9Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: small-node-4
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '4'
+    memory: 16Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: small-node-5
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '2'
+    memory: 14Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: small-node-6
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '2'
+    memory: 8Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: small-node-7
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '2'
+    memory: 11Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: small-node-8
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '2'
+    memory: 16Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: small-node-9
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '4'
+    memory: 8Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
   name: medium-node-0
   namespace: default
 status:
   allocatable: &id001
-    cpu: '11'
-    memory: 46Gi
+    cpu: '16'
+    memory: 44Gi
     pods: '110'
   capacity: *id001
   conditions:
@@ -50,8 +170,8 @@ metadata:
   namespace: default
 status:
   allocatable: &id001
-    cpu: '10'
-    memory: 38Gi
+    cpu: '16'
+    memory: 58Gi
     pods: '110'
   capacity: *id001
   conditions:
@@ -65,8 +185,8 @@ metadata:
   namespace: default
 status:
   allocatable: &id001
-    cpu: '16'
-    memory: 37Gi
+    cpu: '11'
+    memory: 60Gi
     pods: '110'
   capacity: *id001
   conditions:
@@ -80,8 +200,98 @@ metadata:
   namespace: default
 status:
   allocatable: &id001
-    cpu: '14'
-    memory: 34Gi
+    cpu: '12'
+    memory: 32Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: medium-node-4
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '10'
+    memory: 59Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: medium-node-5
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '13'
+    memory: 49Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: medium-node-6
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '10'
+    memory: 45Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: medium-node-7
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '13'
+    memory: 38Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: medium-node-8
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '9'
+    memory: 56Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: medium-node-9
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '9'
+    memory: 54Gi
     pods: '110'
   capacity: *id001
   conditions:
@@ -95,8 +305,8 @@ metadata:
   namespace: default
 status:
   allocatable: &id001
-    cpu: '33'
-    memory: 151Gi
+    cpu: '54'
+    memory: 195Gi
     pods: '110'
   capacity: *id001
   conditions:
@@ -110,8 +320,8 @@ metadata:
   namespace: default
 status:
   allocatable: &id001
-    cpu: '45'
-    memory: 187Gi
+    cpu: '34'
+    memory: 245Gi
     pods: '110'
   capacity: *id001
   conditions:
@@ -125,8 +335,8 @@ metadata:
   namespace: default
 status:
   allocatable: &id001
-    cpu: '64'
-    memory: 134Gi
+    cpu: '39'
+    memory: 224Gi
     pods: '110'
   capacity: *id001
   conditions:
@@ -140,8 +350,98 @@ metadata:
   namespace: default
 status:
   allocatable: &id001
-    cpu: '44'
-    memory: 235Gi
+    cpu: '37'
+    memory: 203Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: large-node-4
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '55'
+    memory: 177Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: large-node-5
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '36'
+    memory: 139Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: large-node-6
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '46'
+    memory: 202Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: large-node-7
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '37'
+    memory: 187Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: large-node-8
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '38'
+    memory: 225Gi
+    pods: '110'
+  capacity: *id001
+  conditions:
+  - status: 'True'
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: large-node-9
+  namespace: default
+status:
+  allocatable: &id001
+    cpu: '49'
+    memory: 244Gi
     pods: '110'
   capacity: *id001
   conditions:

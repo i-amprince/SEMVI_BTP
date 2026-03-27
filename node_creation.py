@@ -4,7 +4,7 @@ import subprocess
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CHANGE THIS TO MATCH YOUR EXPERIMENT (1, 2, or 3)
-EXPERIMENT = 1
+EXPERIMENT = 2
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Setup node distribution to ensure math aligns with paper's unscheduled ratios

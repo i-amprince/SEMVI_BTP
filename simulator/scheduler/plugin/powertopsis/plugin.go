@@ -2,8 +2,11 @@ package powertopsis
 
 import (
 	"context"
+	"encoding/json"
 	"math"
+	"net/http"
 	"strings"
+	"time"
 
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -74,6 +77,34 @@ func (pl *PowerAware) PreScore(ctx context.Context, state *framework.CycleState,
 		return nil
 	}
 
+	// ========================================================================
+	// NEW: DYNAMIC API WEIGHT FETCHING
+	// Pings the Python ML server for real-time weights. 
+	// Uses a 2-second timeout so the scheduler doesn't break if Python is offline.
+	// ========================================================================
+	client := http.Client{Timeout: 2 * time.Second}
+	resp, err := client.Get("http://localhost:5000/get_weights")
+	if err == nil {
+		defer resp.Body.Close()
+		var apiWeights map[string]float64
+		// If Python replies with new weights, temporarily override the YAML weights for this scheduling cycle
+		if err := json.NewDecoder(resp.Body).Decode(&apiWeights); err == nil {
+			if w, ok := apiWeights["pods"]; ok {
+				pl.weights["pods"] = w
+			}
+			if w, ok := apiWeights["cpu"]; ok {
+				pl.weights["cpu"] = w
+			}
+			if w, ok := apiWeights["memory"]; ok {
+				pl.weights["memory"] = w
+			}
+			if w, ok := apiWeights["power"]; ok {
+				pl.weights["power"] = w
+			}
+		}
+	}
+	// ========================================================================
+
 	rawValues := make(map[string]nodeVector, len(nodes))
 	var sumP, sumC, sumM, sumPow float64
 
@@ -140,7 +171,7 @@ func (pl *PowerAware) PreScore(ctx context.Context, state *framework.CycleState,
 		if (dPlus + dMinus) > 1e-9 {
 			closeness = dMinus / (dPlus + dMinus)
 		}
-		
+
 		score := int64(math.Round(closeness * float64(framework.MaxNodeScore)))
 		if score > framework.MaxNodeScore {
 			score = framework.MaxNodeScore
