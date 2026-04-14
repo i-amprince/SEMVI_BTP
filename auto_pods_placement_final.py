@@ -9,13 +9,13 @@ import os
 
 # --- CONFIGURATION ---
 BATCH_SIZE = 50
-TOTAL_BATCHES = 11
+TOTAL_BATCHES = 1
 SCHEDULER_NAME = "power-aware-scheduler"
 
 KUBECONFIG = "--kubeconfig kubeconfig.yaml"
 
 # 👇 CHANGE THIS NAME FOR DIFFERENT TESTS (e.g., "results_xgboost.csv", "results_static.csv")
-RESULTS_CSV_FILE = "output_comparisons/dynamic.csv" 
+RESULTS_CSV_FILE = "output_comparisons/testing.csv" 
 
 # Power Model
 K0 = 10.0 

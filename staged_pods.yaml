@@ -1,159 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-500
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 720m
-        memory: 5917Mi
-      requests:
-        cpu: 720m
-        memory: 5917Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-501
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1450m
-        memory: 5581Mi
-      requests:
-        cpu: 1450m
-        memory: 5581Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-502
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 600m
-        memory: 5600Mi
-      requests:
-        cpu: 600m
-        memory: 5600Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-503
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1040m
-        memory: 5565Mi
-      requests:
-        cpu: 1040m
-        memory: 5565Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-504
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 560m
-        memory: 5226Mi
-      requests:
-        cpu: 560m
-        memory: 5226Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-505
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 690m
-        memory: 4596Mi
-      requests:
-        cpu: 690m
-        memory: 4596Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-506
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1450m
-        memory: 5958Mi
-      requests:
-        cpu: 1450m
-        memory: 5958Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-507
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 590m
-        memory: 4964Mi
-      requests:
-        cpu: 590m
-        memory: 4964Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-508
+  name: demo-pod-0
   namespace: default
 spec:
   containers:
@@ -162,17 +10,17 @@ spec:
     resources:
       limits:
         cpu: 1140m
-        memory: 4183Mi
+        memory: 4198Mi
       requests:
         cpu: 1140m
-        memory: 4183Mi
+        memory: 4198Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-509
+  name: demo-pod-1
   namespace: default
 spec:
   containers:
@@ -180,18 +28,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 550m
-        memory: 5462Mi
+        cpu: 1240m
+        memory: 5099Mi
       requests:
-        cpu: 550m
-        memory: 5462Mi
+        cpu: 1240m
+        memory: 5099Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-510
+  name: demo-pod-2
   namespace: default
 spec:
   containers:
@@ -199,18 +47,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 740m
-        memory: 4611Mi
+        cpu: 720m
+        memory: 4515Mi
       requests:
-        cpu: 740m
-        memory: 4611Mi
+        cpu: 720m
+        memory: 4515Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-511
+  name: demo-pod-3
   namespace: default
 spec:
   containers:
@@ -218,37 +66,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 1290m
-        memory: 4936Mi
+        cpu: 1180m
+        memory: 4452Mi
       requests:
-        cpu: 1290m
-        memory: 4936Mi
+        cpu: 1180m
+        memory: 4452Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-512
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 570m
-        memory: 4944Mi
-      requests:
-        cpu: 570m
-        memory: 4944Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-513
+  name: demo-pod-4
   namespace: default
 spec:
   containers:
@@ -257,17 +86,17 @@ spec:
     resources:
       limits:
         cpu: 1090m
-        memory: 5050Mi
+        memory: 4226Mi
       requests:
         cpu: 1090m
-        memory: 5050Mi
+        memory: 4226Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-514
+  name: demo-pod-5
   namespace: default
 spec:
   containers:
@@ -275,18 +104,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 830m
-        memory: 4700Mi
+        cpu: 530m
+        memory: 4991Mi
       requests:
-        cpu: 830m
-        memory: 4700Mi
+        cpu: 530m
+        memory: 4991Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-515
+  name: demo-pod-6
   namespace: default
 spec:
   containers:
@@ -294,18 +123,113 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 1290m
-        memory: 4107Mi
+        cpu: 730m
+        memory: 4204Mi
       requests:
-        cpu: 1290m
-        memory: 4107Mi
+        cpu: 730m
+        memory: 4204Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-516
+  name: demo-pod-7
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1060m
+        memory: 5814Mi
+      requests:
+        cpu: 1060m
+        memory: 5814Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-8
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 720m
+        memory: 5235Mi
+      requests:
+        cpu: 720m
+        memory: 5235Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-9
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1310m
+        memory: 4122Mi
+      requests:
+        cpu: 1310m
+        memory: 4122Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-10
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1260m
+        memory: 4749Mi
+      requests:
+        cpu: 1260m
+        memory: 4749Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-11
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1200m
+        memory: 5489Mi
+      requests:
+        cpu: 1200m
+        memory: 5489Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-12
   namespace: default
 spec:
   containers:
@@ -314,17 +238,17 @@ spec:
     resources:
       limits:
         cpu: 780m
-        memory: 4688Mi
+        memory: 4977Mi
       requests:
         cpu: 780m
-        memory: 4688Mi
+        memory: 4977Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-517
+  name: demo-pod-13
   namespace: default
 spec:
   containers:
@@ -332,474 +256,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 1490m
-        memory: 5122Mi
+        cpu: 1460m
+        memory: 5474Mi
       requests:
-        cpu: 1490m
-        memory: 5122Mi
+        cpu: 1460m
+        memory: 5474Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-518
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1300m
-        memory: 4546Mi
-      requests:
-        cpu: 1300m
-        memory: 4546Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-519
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1160m
-        memory: 4201Mi
-      requests:
-        cpu: 1160m
-        memory: 4201Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-520
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 630m
-        memory: 5563Mi
-      requests:
-        cpu: 630m
-        memory: 5563Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-521
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1290m
-        memory: 5070Mi
-      requests:
-        cpu: 1290m
-        memory: 5070Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-522
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1090m
-        memory: 4160Mi
-      requests:
-        cpu: 1090m
-        memory: 4160Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-523
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 670m
-        memory: 4310Mi
-      requests:
-        cpu: 670m
-        memory: 4310Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-524
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 630m
-        memory: 5820Mi
-      requests:
-        cpu: 630m
-        memory: 5820Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-525
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1030m
-        memory: 4356Mi
-      requests:
-        cpu: 1030m
-        memory: 4356Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-526
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 980m
-        memory: 5578Mi
-      requests:
-        cpu: 980m
-        memory: 5578Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-527
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1010m
-        memory: 4542Mi
-      requests:
-        cpu: 1010m
-        memory: 4542Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-528
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 950m
-        memory: 5003Mi
-      requests:
-        cpu: 950m
-        memory: 5003Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-529
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1450m
-        memory: 4273Mi
-      requests:
-        cpu: 1450m
-        memory: 4273Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-530
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1230m
-        memory: 5331Mi
-      requests:
-        cpu: 1230m
-        memory: 5331Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-531
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 960m
-        memory: 4223Mi
-      requests:
-        cpu: 960m
-        memory: 4223Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-532
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 560m
-        memory: 6057Mi
-      requests:
-        cpu: 560m
-        memory: 6057Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-533
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1350m
-        memory: 5842Mi
-      requests:
-        cpu: 1350m
-        memory: 5842Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-534
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1190m
-        memory: 6104Mi
-      requests:
-        cpu: 1190m
-        memory: 6104Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-535
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1210m
-        memory: 5912Mi
-      requests:
-        cpu: 1210m
-        memory: 5912Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-536
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 570m
-        memory: 4426Mi
-      requests:
-        cpu: 570m
-        memory: 4426Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-537
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 820m
-        memory: 4703Mi
-      requests:
-        cpu: 820m
-        memory: 4703Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-538
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 570m
-        memory: 5222Mi
-      requests:
-        cpu: 570m
-        memory: 5222Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-539
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 1120m
-        memory: 5427Mi
-      requests:
-        cpu: 1120m
-        memory: 5427Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-540
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 880m
-        memory: 5303Mi
-      requests:
-        cpu: 880m
-        memory: 5303Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-541
-  namespace: default
-spec:
-  containers:
-  - image: nginx:stable-alpine
-    name: workload
-    resources:
-      limits:
-        cpu: 950m
-        memory: 5858Mi
-      requests:
-        cpu: 950m
-        memory: 5858Mi
-  restartPolicy: Never
-  schedulerName: power-aware-scheduler
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo-pod-542
+  name: demo-pod-14
   namespace: default
 spec:
   containers:
@@ -808,17 +276,17 @@ spec:
     resources:
       limits:
         cpu: 600m
-        memory: 4564Mi
+        memory: 5652Mi
       requests:
         cpu: 600m
-        memory: 4564Mi
+        memory: 5652Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-543
+  name: demo-pod-15
   namespace: default
 spec:
   containers:
@@ -826,18 +294,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 1350m
-        memory: 4976Mi
+        cpu: 600m
+        memory: 5504Mi
       requests:
-        cpu: 1350m
-        memory: 4976Mi
+        cpu: 600m
+        memory: 5504Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-544
+  name: demo-pod-16
   namespace: default
 spec:
   containers:
@@ -845,18 +313,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 930m
-        memory: 5031Mi
+        cpu: 1100m
+        memory: 4273Mi
       requests:
-        cpu: 930m
-        memory: 5031Mi
+        cpu: 1100m
+        memory: 4273Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-545
+  name: demo-pod-17
   namespace: default
 spec:
   containers:
@@ -864,10 +332,162 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 910m
+        cpu: 1230m
+        memory: 4607Mi
+      requests:
+        cpu: 1230m
+        memory: 4607Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-18
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1470m
+        memory: 5646Mi
+      requests:
+        cpu: 1470m
+        memory: 5646Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-19
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 580m
+        memory: 5296Mi
+      requests:
+        cpu: 580m
+        memory: 5296Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-20
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1330m
+        memory: 5577Mi
+      requests:
+        cpu: 1330m
+        memory: 5577Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-21
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1080m
+        memory: 4380Mi
+      requests:
+        cpu: 1080m
+        memory: 4380Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-22
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 550m
+        memory: 5029Mi
+      requests:
+        cpu: 550m
+        memory: 5029Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-23
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1270m
+        memory: 4422Mi
+      requests:
+        cpu: 1270m
+        memory: 4422Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-24
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1360m
+        memory: 4509Mi
+      requests:
+        cpu: 1360m
+        memory: 4509Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-25
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 880m
         memory: 5953Mi
       requests:
-        cpu: 910m
+        cpu: 880m
         memory: 5953Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
@@ -875,7 +495,273 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-546
+  name: demo-pod-26
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1140m
+        memory: 5590Mi
+      requests:
+        cpu: 1140m
+        memory: 5590Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-27
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 660m
+        memory: 5551Mi
+      requests:
+        cpu: 660m
+        memory: 5551Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-28
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 710m
+        memory: 5189Mi
+      requests:
+        cpu: 710m
+        memory: 5189Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-29
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1200m
+        memory: 4388Mi
+      requests:
+        cpu: 1200m
+        memory: 4388Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-30
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1110m
+        memory: 4796Mi
+      requests:
+        cpu: 1110m
+        memory: 4796Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-31
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1030m
+        memory: 5098Mi
+      requests:
+        cpu: 1030m
+        memory: 5098Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-32
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 660m
+        memory: 5650Mi
+      requests:
+        cpu: 660m
+        memory: 5650Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-33
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 770m
+        memory: 4995Mi
+      requests:
+        cpu: 770m
+        memory: 4995Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-34
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1180m
+        memory: 4325Mi
+      requests:
+        cpu: 1180m
+        memory: 4325Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-35
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 730m
+        memory: 4227Mi
+      requests:
+        cpu: 730m
+        memory: 4227Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-36
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1310m
+        memory: 5739Mi
+      requests:
+        cpu: 1310m
+        memory: 5739Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-37
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 770m
+        memory: 4960Mi
+      requests:
+        cpu: 770m
+        memory: 4960Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-38
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1410m
+        memory: 5384Mi
+      requests:
+        cpu: 1410m
+        memory: 5384Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-39
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 710m
+        memory: 6140Mi
+      requests:
+        cpu: 710m
+        memory: 6140Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-40
   namespace: default
 spec:
   containers:
@@ -884,17 +770,17 @@ spec:
     resources:
       limits:
         cpu: 900m
-        memory: 4485Mi
+        memory: 5975Mi
       requests:
         cpu: 900m
-        memory: 4485Mi
+        memory: 5975Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-547
+  name: demo-pod-41
   namespace: default
 spec:
   containers:
@@ -902,18 +788,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 810m
-        memory: 5376Mi
+        cpu: 640m
+        memory: 4667Mi
       requests:
-        cpu: 810m
-        memory: 5376Mi
+        cpu: 640m
+        memory: 4667Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-548
+  name: demo-pod-42
   namespace: default
 spec:
   containers:
@@ -921,18 +807,18 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 1170m
-        memory: 5629Mi
+        cpu: 750m
+        memory: 5172Mi
       requests:
-        cpu: 1170m
-        memory: 5629Mi
+        cpu: 750m
+        memory: 5172Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod-549
+  name: demo-pod-43
   namespace: default
 spec:
   containers:
@@ -940,10 +826,124 @@ spec:
     name: workload
     resources:
       limits:
-        cpu: 1450m
-        memory: 6038Mi
+        cpu: 1250m
+        memory: 5850Mi
       requests:
-        cpu: 1450m
-        memory: 6038Mi
+        cpu: 1250m
+        memory: 5850Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-44
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1400m
+        memory: 5731Mi
+      requests:
+        cpu: 1400m
+        memory: 5731Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-45
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 860m
+        memory: 4662Mi
+      requests:
+        cpu: 860m
+        memory: 4662Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-46
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1010m
+        memory: 4468Mi
+      requests:
+        cpu: 1010m
+        memory: 4468Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-47
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1260m
+        memory: 4545Mi
+      requests:
+        cpu: 1260m
+        memory: 4545Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-48
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 650m
+        memory: 4751Mi
+      requests:
+        cpu: 650m
+        memory: 4751Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-pod-49
+  namespace: default
+spec:
+  containers:
+  - image: nginx:stable-alpine
+    name: workload
+    resources:
+      limits:
+        cpu: 1290m
+        memory: 5825Mi
+      requests:
+        cpu: 1290m
+        memory: 5825Mi
   restartPolicy: Never
   schedulerName: power-aware-scheduler
