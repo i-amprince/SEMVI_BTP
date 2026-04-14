@@ -1,50 +1,42 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score, mean_absolute_error
+from sklearn.multioutput import MultiOutputRegressor
+from sklearn.metrics import mean_absolute_error
 import xgboost as xgb
 import joblib
 
-print("--- 🚀 XGBOOST TRAINING (POWER ONLY) ---")
+print("--- 🚀 XGBOOST TRAINING (DUAL-OBJECTIVE: POWER & FRAG) ---")
 
 try:
     df = pd.read_csv("btp_master_full_dataset.csv")
     print(f"Loaded {len(df)} rows from dataset.")
 except FileNotFoundError:
-    print("❌ Dataset not found. Ensure it is in the ai_model folder.")
+    print("❌ Dataset not found.")
     exit()
 
 feature_cols = ['s_cpu', 's_mem', 's_node_frag', 's_active', 's_lbf_c', 's_lbf_m', 
                 'b_cpu_avg', 'b_mem_avg', 'w_pod', 'w_cpu', 'w_mem', 'w_pow']
 X = df[feature_cols]
 
-# TARGET: ONLY Power (r_pow)
-y = df['r_pow']
+# TARGET: BOTH Power and Fragmentation
+y = df[['r_pow', 'r_node_frag']] 
 
-# Split data (80% training, 20% testing)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Train the XGBoost Model
-print("Training XGBoost Regressor model...")
-# Using standard hyper-parameters for a robust baseline
-xgb_model = xgb.XGBRegressor(
-    n_estimators=150, 
-    learning_rate=0.1, 
-    max_depth=6, 
-    random_state=42, 
-    n_jobs=-1
-)
-xgb_model.fit(X_train, y_train)
+# Wrap XGBoost in a MultiOutputRegressor
+print("Training Dual-Objective Model...")
+base_model = xgb.XGBRegressor(n_estimators=150, learning_rate=0.1, max_depth=6)
+multi_model = MultiOutputRegressor(base_model)
+multi_model.fit(X_train, y_train)
 
-# Evaluate the Model
-predictions = xgb_model.predict(X_test)
-r2 = r2_score(y_test, predictions)
-mae = mean_absolute_error(y_test, predictions)
+# Test the model
+preds = multi_model.predict(X_test)
+mae_pow = mean_absolute_error(y_test['r_pow'], preds[:, 0])
+mae_frag = mean_absolute_error(y_test['r_node_frag'], preds[:, 1])
 
-print("\n📊 --- MODEL EVALUATION METRICS ---")
-print(f"R² Score (Accuracy): {r2:.4f} (1.0 is perfect)")
-print(f"Mean Absolute Error: {mae:.2f} Watts")
+print(f"✅ Training Complete!")
+print(f"Power Prediction Error: ±{mae_pow:.2f} W")
+print(f"Fragmentation Prediction Error: ±{mae_frag:.4f}")
 
-# Save the model
-filename = "btp_xgboost_brain.pkl"
-joblib.dump(xgb_model, filename)
-print(f"\n✅ Training complete! XGBoost Model saved as '{filename}'")
+joblib.dump(multi_model, "btp_xgboost_brain.pkl")
+print("💾 Saved as btp_xgboost_brain.pkl")

@@ -99,7 +99,7 @@ def ai_control_loop():
             best_w = current_weights
             expected_pow = 0
             
-            cluster_load = state['s_cpu']
+            cluster_load = state['s_cpu'] # 0.0 is empty (Night), 1.0 is full (Day)
             
             for w in candidate_weights:
                 test_input = pd.DataFrame([{
@@ -107,19 +107,33 @@ def ai_control_loop():
                     'w_pod': w[0], 'w_cpu': w[1], 'w_mem': w[2], 'w_pow': w[3]
                 }])
                 
-                # Single-Objective Models only return ONE prediction: [Power]
-                pred_pow = ai_model.predict(test_input)[0]
+                # Predict BOTH metrics
+                predictions = ai_model.predict(test_input)[0]
+                pred_pow = predictions[0]      # e.g., 6000 Watts
+                pred_frag = predictions[1]     # e.g., 0.65 Fragmentation
                 
-                # The score is purely the predicted power. We want the lowest wattage.
-                score = pred_pow
+                # --- THE DAY/NIGHT LOGIC ---
+                # High Load = Massive penalty for fragmentation (forces stable spread)
+                # Low Load = Minimal penalty for fragmentation (forces power savings)
+                # --- SHARP DAY/NIGHT LOGIC ---
+                if cluster_load >= 0.40:
+                    # DAYTIME (Load > 40%): Massive penalty for fragmentation to force stability
+                    frag_penalty = pred_frag * 20000 
+                    score = pred_pow + frag_penalty
+                else:
+                    # NIGHTTIME (Load < 40%): No fragmentation penalty. 
+                    # We add a small mathematical reward to force the AI to pick 
+                    # high 'w_pow' combinations when predictions are otherwise tied.
+                    score = pred_pow - (w[3] * 500)
                 
                 if score < best_score:
                     best_score = score
                     expected_pow = pred_pow
+                    expected_frag = pred_frag
                     best_w = {"pods": round(w[0],4), "cpu": round(w[1],4), "memory": round(w[2],4), "power": round(w[3],4)}
             
             current_weights = best_w
-            print(f"[{time.strftime('%H:%M:%S')}] Load: {cluster_load*100:.1f}% | Target Power: {expected_pow:.0f}W | W: {current_weights}")
+            print(f"[{time.strftime('%H:%M:%S')}] Load: {cluster_load*100:.1f}% | Pred Pow: {expected_pow:.0f}W | W: {current_weights}")
             
         except Exception as e:
             print(f"⚠️ Loop Error: {e}")
