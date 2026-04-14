@@ -1,0 +1,15 @@
+LINEAR REGRESSION
+R² Score (Accuracy): 0.8424 (1.0 is perfect)
+Mean Absolute Error: 425.54 Watts
+
+DECISION TREE
+R² Score (Accuracy): 0.9312 (1.0 is perfect)
+Mean Absolute Error: 127.05 Watts
+
+RANDOM FOREST
+R² Score (Accuracy): 0.9749 (1.0 is perfect)
+Mean Absolute Error: 97.17 Watts
+
+XGBOOST
+R² Score (Accuracy): 0.9847 (1.0 is perfect)
+Mean Absolute Error: 71.77 Watts

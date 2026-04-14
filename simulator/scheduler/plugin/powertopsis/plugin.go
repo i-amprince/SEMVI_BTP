@@ -77,33 +77,34 @@ func (pl *PowerAware) PreScore(ctx context.Context, state *framework.CycleState,
 		return nil
 	}
 
-	// ========================================================================
-	// NEW: DYNAMIC API WEIGHT FETCHING
-	// Pings the Python ML server for real-time weights. 
-	// Uses a 2-second timeout so the scheduler doesn't break if Python is offline.
-	// ========================================================================
+	// 1. Create a cycle-specific copy of the baseline weights
+	cycleWeights := make(map[string]float64)
+	for k, v := range pl.weights {
+		cycleWeights[k] = v
+	}
+
+	// 2. Fetch dynamic weights from the Python API
 	client := http.Client{Timeout: 2 * time.Second}
-	resp, err := client.Get("http://localhost:5000/get_weights")
+	resp, err := client.Get("http://host.docker.internal:5000/get_weights")
 	if err == nil {
 		defer resp.Body.Close()
 		var apiWeights map[string]float64
-		// If Python replies with new weights, temporarily override the YAML weights for this scheduling cycle
+		// 3. Update only the cycle-specific weights
 		if err := json.NewDecoder(resp.Body).Decode(&apiWeights); err == nil {
 			if w, ok := apiWeights["pods"]; ok {
-				pl.weights["pods"] = w
+				cycleWeights["pods"] = w
 			}
 			if w, ok := apiWeights["cpu"]; ok {
-				pl.weights["cpu"] = w
+				cycleWeights["cpu"] = w
 			}
 			if w, ok := apiWeights["memory"]; ok {
-				pl.weights["memory"] = w
+				cycleWeights["memory"] = w
 			}
 			if w, ok := apiWeights["power"]; ok {
-				pl.weights["power"] = w
+				cycleWeights["power"] = w
 			}
 		}
 	}
-	// ========================================================================
 
 	rawValues := make(map[string]nodeVector, len(nodes))
 	var sumP, sumC, sumM, sumPow float64
@@ -147,10 +148,10 @@ func (pl *PowerAware) PreScore(ctx context.Context, state *framework.CycleState,
 
 	for name, v := range rawValues {
 		weighted := nodeVector{
-			pods:  (v.pods / denoms.pods) * pl.weights["pods"],
-			cpu:   (v.cpu / denoms.cpu) * pl.weights["cpu"],
-			mem:   (v.mem / denoms.mem) * pl.weights["memory"],
-			power: (v.power / denoms.power) * pl.weights["power"],
+			pods:  (v.pods / denoms.pods) * cycleWeights["pods"],
+			cpu:   (v.cpu / denoms.cpu) * cycleWeights["cpu"],
+			mem:   (v.mem / denoms.mem) * cycleWeights["memory"],
+			power: (v.power / denoms.power) * cycleWeights["power"],
 		}
 		weightedMatrix[name] = weighted
 

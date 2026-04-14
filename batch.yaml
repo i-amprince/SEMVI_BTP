@@ -1,0 +1,749 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p0
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 850m
+        memory: 4270Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p1
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1060m
+        memory: 4672Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p2
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1080m
+        memory: 5152Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p3
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 540m
+        memory: 4568Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p4
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1150m
+        memory: 5646Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p5
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1230m
+        memory: 5306Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p6
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1440m
+        memory: 4929Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p7
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1410m
+        memory: 4879Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p8
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1140m
+        memory: 5814Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p9
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 620m
+        memory: 4910Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p10
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1290m
+        memory: 4169Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p11
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 520m
+        memory: 5315Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p12
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1310m
+        memory: 5128Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p13
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 510m
+        memory: 5347Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p14
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1190m
+        memory: 4727Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p15
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1320m
+        memory: 4727Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p16
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1170m
+        memory: 5329Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p17
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 860m
+        memory: 5829Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p18
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1240m
+        memory: 5539Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p19
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 700m
+        memory: 4687Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p20
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1480m
+        memory: 4396Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p21
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 650m
+        memory: 5401Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p22
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 570m
+        memory: 5738Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p23
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 860m
+        memory: 5293Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p24
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1010m
+        memory: 5192Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p25
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1250m
+        memory: 4519Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p26
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1150m
+        memory: 5508Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p27
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1460m
+        memory: 4432Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p28
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1250m
+        memory: 5851Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p29
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 850m
+        memory: 6017Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p30
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1240m
+        memory: 5105Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p31
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1090m
+        memory: 4982Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p32
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 930m
+        memory: 5372Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p33
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 560m
+        memory: 5465Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p34
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 630m
+        memory: 5473Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p35
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 580m
+        memory: 4245Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p36
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1340m
+        memory: 5719Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p37
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 800m
+        memory: 4984Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p38
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1330m
+        memory: 5451Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p39
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1090m
+        memory: 4606Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p40
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1280m
+        memory: 5550Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p41
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1150m
+        memory: 5092Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p42
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 990m
+        memory: 4417Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p43
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1390m
+        memory: 5741Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p44
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1040m
+        memory: 5761Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p45
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1440m
+        memory: 6045Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p46
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 770m
+        memory: 4516Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p47
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 790m
+        memory: 4151Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p48
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 690m
+        memory: 6000Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e70-b0-p49
+spec:
+  containers:
+  - image: nginx:alpine
+    name: c
+    resources:
+      requests:
+        cpu: 1430m
+        memory: 6105Mi
+  restartPolicy: Never
+  schedulerName: power-aware-scheduler
