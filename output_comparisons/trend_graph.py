@@ -7,7 +7,7 @@ def main():
     try:
         df_default = pd.read_csv('csvs/default.csv')
         df_static = pd.read_csv('csvs/static.csv')
-        df_dynamic = pd.read_csv('csvs/dynamic.csv')
+        df_dynamic = pd.read_csv('csvs/testing_delete.csv')
     except FileNotFoundError as e:
         print(f"Error: Could not find CSV file. {e}")
         return

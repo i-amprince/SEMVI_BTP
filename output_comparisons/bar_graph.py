@@ -7,7 +7,7 @@ def main():
     # 1. Load the Data
     df_default = pd.read_csv('csvs/default.csv')
     df_static = pd.read_csv('csvs/static.csv')
-    df_dynamic = pd.read_csv('csvs/dynamic.csv')
+    df_dynamic = pd.read_csv('csvs/dynamic_multi.csv')
 
     # 2. Define the metrics to plot and their readable titles
     metrics = {
